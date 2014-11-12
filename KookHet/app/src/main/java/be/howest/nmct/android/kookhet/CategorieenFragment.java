@@ -22,18 +22,16 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
 
     // The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NavigatieId = "NavigatieId";
-
     private static final String KEY_NavigatieId = "NavigatieId";
-
     private int mNavigatieId;
 
     private OnFragmentInteractionListener mListener;
 
-    // The fragment's ListView/GridView.
-    private AbsListView mListView;
-
     // The Adapter which will be used to populate the ListView/GridView with Views.
     private ListAdapter mAdapter;
+
+    // The fragment's ListView/GridView.
+    private AbsListView mListView;
 
     // Use this factory method to create a new instance of this fragment using the provided parameters.
     public static CategorieenFragment newInstance(int NavigatieId) {
@@ -52,11 +50,6 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
-
-//            // Categorienfragment kan maar op 1 manier gestart worden:
-//            // - Vanuit de navigationdrawer, met een waarde als id. De titel is hetzelfde als het aangeklikte item in de naviagtiondrawer.
-//            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), null);
-
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
@@ -65,7 +58,6 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (savedInstanceState != null) {
             mNavigatieId = savedInstanceState.getInt(KEY_NavigatieId);
         }
@@ -74,13 +66,13 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
                 mNavigatieId = getArguments().getInt(ARG_NavigatieId);
             }
         }
-
         // TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categorieen, container, false);
 
         // Set the adapter
@@ -132,7 +124,6 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
     // The default content for this Fragment has a TextView that is shown when the list is empty. If you would like to change the text, call this method to supply the text it should use.
     public void setEmptyText(CharSequence emptyText) {
         View emptyView = mListView.getEmptyView();
-
         if (emptyText instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }

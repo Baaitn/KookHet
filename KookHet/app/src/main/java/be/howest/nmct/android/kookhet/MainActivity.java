@@ -9,29 +9,23 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, CategorieenFragment.OnFragmentInteractionListener, ReceptenFragment.OnFragmentInteractionListener, ReceptFragment.OnFragmentInteractionListener, InstellingenFragment.OnFragmentInteractionListener,
-        FragmentManager.OnBackStackChangedListener {
-
-    int mPreviousStackCount;
+public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, CategorieenFragment.OnFragmentInteractionListener, ReceptenFragment.OnFragmentInteractionListener, ReceptFragment.OnFragmentInteractionListener, InstellingenFragment.OnFragmentInteractionListener, FragmentManager.OnBackStackChangedListener {
 
     // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    //Used to store the last screen title. For use in {@link #restoreActionBar()}.
+    // Used to store the last screen title. For use in {@link #restoreActionBar()}.
     private CharSequence mTitle;
+
+    //
+    int mPreviousStackCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        //mTitle = getTitle(); // Verwijderd omdat na het wijzigen van orientatie de titel veranderde naar 'Kook Het!' ipv de correcte titel om een of andere reden, blijkbaar was dit hetgeen die dit ophaalde.
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        //
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout)); // Set up the drawer.
         getFragmentManager().addOnBackStackChangedListener(this);
     }
 
@@ -57,9 +51,6 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             case 3:
                 fragmentManager.beginTransaction().replace(R.id.container, InstellingenFragment.newInstance(position + 1)).commit();
                 break;
-//            default:
-//                fragmentManager.beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
-//                break;
         }
     }
 
@@ -84,11 +75,29 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         }
     }
 
-    public void updateActionBar(String Title){
+    public void updateActionBar(int number, String text){
+        if (text != null){
+            mTitle = text;
+        } else {
+            switch (number) {
+                case 1:
+                    mTitle = getString(R.string.title_section1);
+                    break;
+                case 2:
+                    mTitle = getString(R.string.title_section2);
+                    break;
+                case 3:
+                    mTitle = getString(R.string.title_section3);
+                    break;
+                case 4:
+                    mTitle = getString(R.string.title_section4);
+                    break;
+            }
+        }
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(Title);
+        actionBar.setTitle(mTitle);
     }
 
     public void restoreActionBar() {
@@ -139,33 +148,4 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    //A placeholder fragment containing a simple view.
-//    public static class PlaceholderFragment extends Fragment {
-//        //The fragment argument representing the section number for this fragment.
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        //Returns a new instance of this fragment for the given section number.
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        public PlaceholderFragment() {}
-//
-//        @Override
-//        public void onAttach(Activity activity) {
-//            super.onAttach(activity);
-//            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER), null);
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            return rootView;
-//        }
-//    }
 }

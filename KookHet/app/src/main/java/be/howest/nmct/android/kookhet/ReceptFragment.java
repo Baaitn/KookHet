@@ -15,15 +15,15 @@ public class ReceptFragment extends Fragment {
 
     // The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NavigatieId = "NavigatieId";
-    private static final String ARG_CategorieNaam = "CategorieNaam";
-    private static final String ARG_ReceptNaam = "ReceptNaam";
-
     private static final String KEY_NavigatieId = "NavigatieId";
-    private static final String KEY_CategorieNaam = "CategorieNaam";
-    private static final String KEY_ReceptNaam = "ReceptNaam";
-
     private int mNavigatieId;
+
+    private static final String ARG_CategorieNaam = "CategorieNaam";
+    private static final String KEY_CategorieNaam = "CategorieNaam";
     private String mCategorieNaam;
+
+    private static final String ARG_ReceptNaam = "ReceptNaam";
+    private static final String KEY_ReceptNaam = "ReceptNaam";
     private String mReceptNaam;
 
     private OnFragmentInteractionListener mListener;
@@ -47,12 +47,6 @@ public class ReceptFragment extends Fragment {
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
-
-//            // Receptfragment kan maar op 1 manier gestart worden:
-//            // - Vanuit receptenfragment, met een receptnaam. De titel is een custom waarde, nl. de naam van een recept.
-//            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), getArguments().getString(ARG_ReceptNaam));
-//            ((MainActivity) activity).restoreActionBar();
-
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
@@ -61,7 +55,6 @@ public class ReceptFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (savedInstanceState != null) {
             mNavigatieId = savedInstanceState.getInt(KEY_NavigatieId);
             mCategorieNaam = savedInstanceState.getString(KEY_CategorieNaam);
@@ -118,5 +111,4 @@ public class ReceptFragment extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
 }

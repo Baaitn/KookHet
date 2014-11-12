@@ -28,13 +28,13 @@ public class NavigationDrawerFragment extends Fragment {
     // Remember the position of the selected item.
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
-    //Per the design guidelines, you should show the drawer on launch until the user manually expands it. This shared preference tracks this.
+    // Per the design guidelines, you should show the drawer on launch until the user manually expands it. This shared preference tracks this.
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
 
-    //A pointer to the current callbacks instance (the Activity).
+    // A pointer to the current callbacks instance (the Activity).
     private NavigationDrawerCallbacks mCallbacks;
 
-    //Helper component that ties the action bar to the navigation drawer.
+    // Helper component that ties the action bar to the navigation drawer.
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
@@ -69,7 +69,6 @@ public class NavigationDrawerFragment extends Fragment {
         } else {
             selectItem(mCurrentSelectedPosition); // Select either the default item (0) or the last selected item.
         }
-        //selectItem(mCurrentSelectedPosition); // Select either the default item (0) or the last selected item. // Verplaatst naar else omdat telkens je de orientatie draaide er terug het fragment getoond werd waaruit je starte, bv: Selecteer categorie > selecteer recept > draai > categoriefragment word getoond ipv receptenfragment
     }
 
     @Override
@@ -128,10 +127,10 @@ public class NavigationDrawerFragment extends Fragment {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
-        // set a custom shadow that overlays the main content when the drawer opens
+        // Set a custom shadow that overlays the main content when the drawer opens.
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
-        // set up the drawer's list view with items and click listener
+        // Set up the drawer's list view with items and click listener.
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
@@ -187,8 +186,8 @@ public class NavigationDrawerFragment extends Fragment {
     // Per the navigation drawer design guidelines, updates the action bar to show the global app 'context', rather than just what's in the current screen.
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(R.string.app_name);
     }
 
@@ -229,9 +228,9 @@ public class NavigationDrawerFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    //Callbacks interface that all activities using this fragment must implement.
+    // Callbacks interface that all activities using this fragment must implement.
     public static interface NavigationDrawerCallbacks {
-        //Called when an item in the navigation drawer is selected.
+        // Called when an item in the navigation drawer is selected.
         void onNavigationDrawerItemSelected(int position);
     }
 }

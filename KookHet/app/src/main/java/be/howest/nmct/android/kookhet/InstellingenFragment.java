@@ -15,9 +15,7 @@ public class InstellingenFragment extends Fragment {
 
     // The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NavigatieId = "NavigatieId";
-
     private static final String KEY_NavigatieId = "NavigatieId";
-
     private int mNavigatieId;
 
     private OnFragmentInteractionListener mListener;
@@ -39,11 +37,6 @@ public class InstellingenFragment extends Fragment {
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
-
-//            // Instellingenfragment kan maar op 1 manier gestart worden:
-//            // - Vanuit de navigationdrawer, met een waarde als id. De titel is hetzelfde als het aangeklikte item in de naviagtiondrawer.
-//            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), null);
-
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
@@ -52,7 +45,6 @@ public class InstellingenFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (savedInstanceState != null) {
             mNavigatieId = savedInstanceState.getInt(ARG_NavigatieId);
         }
@@ -103,5 +95,4 @@ public class InstellingenFragment extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
 }

@@ -22,21 +22,20 @@ public class ReceptenFragment extends Fragment implements AbsListView.OnItemClic
 
     // The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NavigatieId = "NavigatieId";
-    private static final String ARG_CategorieNaam = "CategorieNaam";
-
     private static final String KEY_NavigatieId = "NavigatieId";
-    private static final String KEY_CategorieNaam = "CategorieNaam";
-
     private int mNavigatieId;
+
+    private static final String ARG_CategorieNaam = "CategorieNaam";
+    private static final String KEY_CategorieNaam = "CategorieNaam";
     private String mCategorieNaam;
 
     private OnFragmentInteractionListener mListener;
 
-    // The fragment's ListView/GridView.
-    private AbsListView mListView;
-
     // The Adapter which will be used to populate the ListView/GridView with Views.
     private ListAdapter mAdapter;
+
+    // The fragment's ListView/GridView.
+    private AbsListView mListView;
 
     // Use this factory method to create a new instance of this fragment using the provided parameters.
     public static ReceptenFragment newInstance(int NavigatieId, String CategorieNaam) {
@@ -56,17 +55,6 @@ public class ReceptenFragment extends Fragment implements AbsListView.OnItemClic
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
-
-//            // Receptenfragment kan op 2 manieren gestart worden:
-//            // - Vanuit de navigationdrawer, zonder een categorienaam. De titel is hetzelfde als het aangeklikte item in de naviagtiondrawer.
-//            // - Vanuit categorieenfragment, met een categorienaam. De titel is een custom waarde, nl. de naam van een categorie.
-//            if (getArguments().getString(ARG_CategorieNaam) == null){ // if (getArguments().getInt(ARG_NavigatieId) != 0){
-//                ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), null);
-//            } else {
-//                ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), getArguments().getString(ARG_CategorieNaam));
-//                ((MainActivity) activity).restoreActionBar();
-//            }
-
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
@@ -75,7 +63,6 @@ public class ReceptenFragment extends Fragment implements AbsListView.OnItemClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (savedInstanceState != null) {
             mNavigatieId = savedInstanceState.getInt(KEY_NavigatieId);
             mCategorieNaam = savedInstanceState.getString(KEY_CategorieNaam);
@@ -86,13 +73,13 @@ public class ReceptenFragment extends Fragment implements AbsListView.OnItemClic
                 mCategorieNaam = getArguments().getString(ARG_CategorieNaam);
             }
         }
-
         // TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<DummyContent.Recept>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.RECEPTEN);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recepten, container, false);
 
         // Set the adapter
@@ -111,7 +98,7 @@ public class ReceptenFragment extends Fragment implements AbsListView.OnItemClic
         // Receptenfragment kan op 2 manieren gestart worden:
         // - Vanuit de navigationdrawer, zonder een categorienaam. De titel is hetzelfde als het aangeklikte item in de naviagtiondrawer.
         // - Vanuit categorieenfragment, met een categorienaam. De titel is een custom waarde, nl. de naam van een categorie.
-        if (getArguments().getString(ARG_CategorieNaam) == null){ // if (getArguments().getInt(ARG_NavigatieId) != 0){
+        if (getArguments().getString(ARG_CategorieNaam) == null){
             ((MainActivity) getActivity()).onSectionAttached(getArguments().getInt(ARG_NavigatieId), null);
             ((MainActivity) getActivity()).restoreActionBar();
         } else {
@@ -152,7 +139,6 @@ public class ReceptenFragment extends Fragment implements AbsListView.OnItemClic
     // The default content for this Fragment has a TextView that is shown when the list is empty. If you would like to change the text, call this method to supply the text it should use.
     public void setEmptyText(CharSequence emptyText) {
         View emptyView = mListView.getEmptyView();
-
         if (emptyText instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
