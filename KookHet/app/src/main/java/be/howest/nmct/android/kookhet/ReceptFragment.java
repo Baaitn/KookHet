@@ -48,10 +48,10 @@ public class ReceptFragment extends Fragment {
         try {
             mListener = (OnFragmentInteractionListener) activity;
 
-            // Receptfragment kan maar op 1 manier gestart worden:
-            // - Vanuit receptenfragment, met een receptnaam. De titel is een custom waarde, nl. de naam van een recept.
-            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), getArguments().getString(ARG_ReceptNaam));
-            ((MainActivity) activity).restoreActionBar();
+//            // Receptfragment kan maar op 1 manier gestart worden:
+//            // - Vanuit receptenfragment, met een receptnaam. De titel is een custom waarde, nl. de naam van een recept.
+//            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), getArguments().getString(ARG_ReceptNaam));
+//            ((MainActivity) activity).restoreActionBar();
 
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
@@ -80,6 +80,15 @@ public class ReceptFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_recept, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Receptfragment kan maar op 1 manier gestart worden:
+        // - Vanuit receptenfragment, met een receptnaam. De titel is een custom waarde, nl. de naam van een recept.
+        ((MainActivity) getActivity()).onSectionAttached(getArguments().getInt(ARG_NavigatieId), getArguments().getString(ARG_ReceptNaam));
+        ((MainActivity) getActivity()).restoreActionBar();
     }
 
     @Override

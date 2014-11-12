@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Kook Het!</string>
-    <string name="title_section1">Kook Het!</string>
+    <string name="title_section1">Categorieën</string>
     <string name="title_section2">Favorieten</string>
     <string name="title_section3">Menu</string>
     <string name="title_section4">Instellingen</string>

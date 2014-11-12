@@ -53,9 +53,9 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
         try {
             mListener = (OnFragmentInteractionListener) activity;
 
-            // Categorienfragment kan maar op 1 manier gestart worden:
-            // - Vanuit de navigationdrawer, met een waarde als id. De titel is hetzelfde als het aangeklikte item in de naviagtiondrawer.
-            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), null);
+//            // Categorienfragment kan maar op 1 manier gestart worden:
+//            // - Vanuit de navigationdrawer, met een waarde als id. De titel is hetzelfde als het aangeklikte item in de naviagtiondrawer.
+//            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), null);
 
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
@@ -94,6 +94,15 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        // Categorienfragment kan maar op 1 manier gestart worden:
+        // - Vanuit de navigationdrawer, met een waarde als id. De titel is hetzelfde als het aangeklikte item in de naviagtiondrawer.
+        ((MainActivity) getActivity()).onSectionAttached(getArguments().getInt(ARG_NavigatieId), null);
+        ((MainActivity) getActivity()).restoreActionBar();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -116,7 +125,7 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
             fragmentManager.beginTransaction().replace(R.id.container, ReceptenFragment.newInstance(
                     getArguments().getInt(ARG_NavigatieId),
                     parent.getItemAtPosition(position).toString()
-            )).commit();
+            )).addToBackStack(null).commit();
         }
     }
 

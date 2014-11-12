@@ -16,6 +16,8 @@ public class InstellingenFragment extends Fragment {
     // The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NavigatieId = "NavigatieId";
 
+    private static final String KEY_NavigatieId = "NavigatieId";
+
     private int mNavigatieId;
 
     private OnFragmentInteractionListener mListener;
@@ -38,9 +40,9 @@ public class InstellingenFragment extends Fragment {
         try {
             mListener = (OnFragmentInteractionListener) activity;
 
-            // Instellingenfragment kan maar op 1 manier gestart worden:
-            // - Vanuit de navigationdrawer, met een waarde als id. De titel is hetzelfde als het aangeklikte item in de naviagtiondrawer.
-            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), null);
+//            // Instellingenfragment kan maar op 1 manier gestart worden:
+//            // - Vanuit de navigationdrawer, met een waarde als id. De titel is hetzelfde als het aangeklikte item in de naviagtiondrawer.
+//            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_NavigatieId), null);
 
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
@@ -68,6 +70,15 @@ public class InstellingenFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        // Instellingenfragment kan maar op 1 manier gestart worden:
+        // - Vanuit de navigationdrawer, met een waarde als id. De titel is hetzelfde als het aangeklikte item in de naviagtiondrawer.
+        ((MainActivity) getActivity()).onSectionAttached(getArguments().getInt(ARG_NavigatieId), null);
+        ((MainActivity) getActivity()).restoreActionBar();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -76,7 +87,7 @@ public class InstellingenFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(ARG_NavigatieId, mNavigatieId);
+        outState.putInt(KEY_NavigatieId, mNavigatieId);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

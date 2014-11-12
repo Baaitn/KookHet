@@ -9,7 +9,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, CategorieenFragment.OnFragmentInteractionListener, ReceptenFragment.OnFragmentInteractionListener, InstellingenFragment.OnFragmentInteractionListener, ReceptFragment.OnFragmentInteractionListener {
+public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, CategorieenFragment.OnFragmentInteractionListener, ReceptenFragment.OnFragmentInteractionListener, ReceptFragment.OnFragmentInteractionListener, InstellingenFragment.OnFragmentInteractionListener,
+        FragmentManager.OnBackStackChangedListener {
+
+    int mPreviousStackCount;
 
     // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -23,11 +26,13 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        // Verwijderd omdat na het wijzigen van orientatie de titel veranderde naar 'Kook Het!' ipv de correcte titel om een of andere reden, blijkbaar was dit hetgeen die dit ophaalde.
-        // mTitle = getTitle();
+        //mTitle = getTitle(); // Verwijderd omdat na het wijzigen van orientatie de titel veranderde naar 'Kook Het!' ipv de correcte titel om een of andere reden, blijkbaar was dit hetgeen die dit ophaalde.
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        //
+        getFragmentManager().addOnBackStackChangedListener(this);
     }
 
     @Override
@@ -79,6 +84,13 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         }
     }
 
+    public void updateActionBar(String Title){
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(Title);
+    }
+
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -94,6 +106,17 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     @Override
     public void onFragmentInteraction(Uri uri) {
         // TODO Iets, geen idee wat
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        FragmentManager fragmentManager = getFragmentManager();
+        int previousStackCount = mPreviousStackCount;
+        int currentStackCount = fragmentManager.getBackStackEntryCount();
+        mPreviousStackCount = currentStackCount;
+        if (currentStackCount < previousStackCount) {
+            //Log.i(this.getLocalClassName(), "GoBack");
+        }
     }
 
     @Override
