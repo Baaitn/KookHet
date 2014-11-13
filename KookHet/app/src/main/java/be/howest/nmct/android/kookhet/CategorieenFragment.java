@@ -2,36 +2,38 @@ package be.howest.nmct.android.kookhet;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.TextView;
-
-import be.howest.nmct.android.kookhet.dummy.DummyContent;
+import android.widget.CursorAdapter;
+import android.widget.GridView;
+import android.widget.SimpleCursorAdapter;
 
 // A fragment representing a list of Items.
 // Large screen devices (such as tablets) are supported by replacing the ListView with a GridView.
 // Activities containing this fragment MUST implement the {@link Callbacks} interface.
-public class CategorieenFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class CategorieenFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     // The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NavigatieId = "NavigatieId";
     private static final String KEY_NavigatieId = "NavigatieId";
     private int mNavigatieId;
 
-    private OnFragmentInteractionListener mListener;
+    private OnCatSelectionListner mListener;
 
     // The Adapter which will be used to populate the ListView/GridView with Views.
-    private ListAdapter mAdapter;
+  //  private ListAdapter mAdapter;
+    private CursorAdapter mAdapter;
 
     // The fragment's ListView/GridView.
-    private AbsListView mListView;
+   // private AbsListView mListView;
+    private GridView mGridView;
+public interface OnCatSelectionListner{
+    public void onCatSelected(int cat);
+
+}
 
     // Use this factory method to create a new instance of this fragment using the provided parameters.
     public static CategorieenFragment newInstance(int NavigatieId) {
@@ -40,49 +42,47 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
         args.putInt(ARG_NavigatieId, NavigatieId);
         fragment.setArguments(args);
         return fragment;
+
     }
 
     // Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
     public CategorieenFragment() {}
 
-    @Override
+    //@Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
+      super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
-        }
+          mListener = (OnCatSelectionListner) activity;
+       } catch (ClassCastException e) {
+           throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
+      }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            mNavigatieId = savedInstanceState.getInt(KEY_NavigatieId);
+       super.onCreate(savedInstanceState);
+     if (savedInstanceState != null) {
+            mNavigatieId = savedInstanceState.getInt(KEY_NavigatieId,0);
         }
-        else {
-            if (getArguments() != null) {
-                mNavigatieId = getArguments().getInt(ARG_NavigatieId);
-            }
-        }
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
+
+
+        String [] Columns = new String [] {"name"};
+        int[] viewIds = new int[] {android.R.id.text1};
+
+        GridView gridview = (GridView) getActivity() .findViewById(R.id.gridviewcat);
+
+        mAdapter = new SimpleCursorAdapter(getActivity(),R.layout.cel_categorie,null, Columns,viewIds , 0);
+        gridview.setAdapter(mAdapter);
+
+
+
+       // mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_categorieen, container, false);
-
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
-
-        return view;
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(0,null,this);
     }
 
     @Override
@@ -107,6 +107,22 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
     }
 
     @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        return new CursorLoader(getActivity(),DController.Categorie.CONTENT_URI,new String[] {DController.Categorie._ID,DController.Categorie.NAME},null,null,null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        mAdapter.swapCursor(cursor);
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+mAdapter.swapCursor(null);
+    }
+ /*
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
@@ -122,12 +138,12 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
     }
 
     // The default content for this Fragment has a TextView that is shown when the list is empty. If you would like to change the text, call this method to supply the text it should use.
-    public void setEmptyText(CharSequence emptyText) {
+  public void setEmptyText(CharSequence emptyText) {
         View emptyView = mListView.getEmptyView();
         if (emptyText instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
-    }
+    }*/
 
     // This interface must be implemented by activities that contain this fragment to allow an interaction in this fragment to be communicated to the activity and potentially other fragments contained in that activity.
     // See the Android Training lesson <a href="http://developer.android.com/training/basics/fragments/communicating.html">Communicating with Other Fragments</a> for more information.

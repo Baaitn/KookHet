@@ -16,7 +16,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
     // Used to store the last screen title. For use in {@link #restoreActionBar()}.
     private CharSequence mTitle;
-
+    private int mCat;
     //
     int mPreviousStackCount;
 
@@ -137,6 +137,27 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             return true;
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+ //   @Override
+    public void onCatSelected(int cat) {
+        mCat = cat;
+        /*
+        if(mTwoPane) {
+            CategorieenFragment fragment = CategorieenFragment.newInstance(cat);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            if(getFragmentManager().findFragmentById(R.id.details_fragment) == null)
+                transaction.add(R.id.details_fragment, fragment);
+            else
+                transaction.replace(R.id.details_fragment, fragment);
+
+            transaction.commit();
+        } else {
+            Intent i = new Intent(this, RibbonsActivity.class);
+            i.putExtra(RibbonsActivity.EXTRA_ORDER, cat);
+            startActivity(i);
+        }*/
     }
 
     @Override
