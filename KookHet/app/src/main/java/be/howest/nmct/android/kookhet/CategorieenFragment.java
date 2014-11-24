@@ -3,22 +3,25 @@ package be.howest.nmct.android.kookhet;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.ListAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
-import be.howest.nmct.android.kookhet.dummy.DummyContent;
 
 // A fragment representing a list of Items.
 // Large screen devices (such as tablets) are supported by replacing the ListView with a GridView.
 // Activities containing this fragment MUST implement the {@link Callbacks} interface.
-public class CategorieenFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class CategorieenFragment extends Fragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     // The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NavigatieId = "NavigatieId";
@@ -28,7 +31,8 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
     private OnFragmentInteractionListener mListener;
 
     // The Adapter which will be used to populate the ListView/GridView with Views.
-    private ListAdapter mAdapter;
+    //private ListAdapter mAdapter;
+    private CursorAdapter mAdapter;
 
     // The fragment's ListView/GridView.
     private AbsListView mListView;
@@ -67,7 +71,13 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
             }
         }
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
+        //mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
+
+        String[] columns = new String[] { Contract.CategorieenColumns.Naam };
+        int[] viewIds = new int[] { android.R.id.text1 };
+
+        mAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, columns, viewIds, 0);
+        //mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.cel_categorie, null, columns, viewIds , 0);
     }
 
     @Override
@@ -83,6 +93,12 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
         mListView.setOnItemClickListener(this);
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -110,15 +126,33 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.CATEGORIEEN.get(position).id);
+            //mListener.onFragmentInteraction(DummyContent.CATEGORIEEN.get(position).id);
+
+            Cursor cursor = (Cursor)mAdapter.getItem(position);
 
             // Bij klikken op categorie, lijst recepten in categorie ophalen
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, ReceptenFragment.newInstance(
                     getArguments().getInt(ARG_NavigatieId),
-                    parent.getItemAtPosition(position).toString()
+                    /*parent.getItemAtPosition(position).toString()*/
+                    cursor.getString(cursor.getColumnIndex(Contract.CategorieenColumns.Naam))
             )).addToBackStack(null).commit();
         }
+    }
+
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        //return new CategorieenLoader(getActivity());
+        return new CursorLoader(getActivity(), Contract.Categorieen.CONTENT_URI, new String[] {Contract.Categorieen._ID, Contract.Categorieen.Naam}, null, null, null); //todo: Q: tom's code had curorloader, wrm dan de moeite doen om een categorieenloader te maken?
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        mAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+        mAdapter.swapCursor(null);
     }
 
     // The default content for this Fragment has a TextView that is shown when the list is empty. If you would like to change the text, call this method to supply the text it should use.
