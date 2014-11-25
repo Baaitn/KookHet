@@ -21,27 +21,25 @@ public class ReceptenLoader extends AsyncTaskLoader<Cursor> {
 
         SQLiteDatabase database = helper.getWritableDatabase();
 
+        mCursor = database.rawQuery(
+                " SELECT *" +
+                " FROM Recepten R" +
+                " INNER JOIN ReceptCategorie RC ON (RC.rcReceptId = R._ID)" +
+                " INNER JOIN Categorieen C ON (RC.rcCategorieId = C._ID)" +
+                " WHERE C.cNaam = ?", new String[] {"" + mCategorieNaam});
+
 //        mCursor = database.query(
-//                Contract.Recepten.CONTENT_DIRECTORY + " R Inner Join " + Contract.Categorieen.CONTENT_DIRECTORY
-//                        + " C On R. " + Contract.ReceptenColumns.CategorieId + " = C." + Contract.CategorieenColumns._ID,
+//                Contract.Recepten.CONTENT_DIRECTORY,
 //                new String[] {
-//                        "R." + Contract.ReceptenColumns._ID,
+//                        Contract.ReceptenColumns._ID,
 //                        /*"COUNT(*) AS " + Contract.ReceptenColumns._COUNT,*/
-//                        "R." + Contract.ReceptenColumns.Naam,
-//                        "R." + Contract.ReceptenColumns.CategorieId},
-//                "( " + "C." +Contract.CategorieenColumns.Naam + " = ? )",
-//                new String[] { "" + mCategorieNaam },
+//                        Contract.ReceptenColumns.Naam},
+//                null,
+//                null,
 //                null,
 //                null,
 //                Contract.ReceptenColumns.Naam + " ASC"
 //        );
-
-//        mCursor = database.rawQuery("Select * From Recepten R Inner Join Categorieen C On (R.rCategorieId = C._id) Where C.cNaam = ?", new String[] { "" + mCategorieNaam });
-
-        mCursor = database.rawQuery("SELECT recepten.naam, recepten.bereidingsWijze, recepten.bereidingsTijd, recepten.isVegetarisch, recepten.image" +
-                " FROM KookHetDB.dbo.recepten" +
-                " INNER JOIN KookHetDB.dbo.receptCategorie ON recepten.id = receptCategorie.receptID" +
-                " WHERE receptCategorie.categorieID = ?",new String[] {"" + mCategorieId});
 
         mCursor.getCount();
 

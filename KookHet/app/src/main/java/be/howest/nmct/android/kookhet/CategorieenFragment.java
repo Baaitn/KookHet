@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -17,6 +16,8 @@ import android.widget.CursorAdapter;
 import android.widget.ListAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
+import be.howest.nmct.android.kookhet.database.CategorieenLoader;
 
 // A fragment representing a list of Items.
 // Large screen devices (such as tablets) are supported by replacing the ListView with a GridView.
@@ -70,14 +71,13 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
                 mNavigatieId = getArguments().getInt(ARG_NavigatieId);
             }
         }
-        // TODO: Change Adapter to display your content
-        //mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
 
         String[] columns = new String[] { Contract.CategorieenColumns.Naam };
-        int[] viewIds = new int[] { android.R.id.text1 };
+        int[] viewIds = new int[] { R.id.lblCategorienaam };
 
-        mAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, columns, viewIds, 0);
-        //mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.cel_categorie, null, columns, viewIds , 0);
+        //mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
+        //mAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, columns, viewIds, 0);
+        mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.row_categorie, null, columns, viewIds , 0);
     }
 
     @Override
@@ -141,8 +141,10 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
     }
 
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        //return new CategorieenLoader(getActivity());
-        return new CursorLoader(getActivity(), Contract.Categorieen.CONTENT_URI, new String[] {Contract.Categorieen._ID, Contract.Categorieen.Naam}, null, null, null); //todo: Q: tom's code had curorloader, wrm dan de moeite doen om een categorieenloader te maken?
+        //todo: Q: tom's code had curorloader, wrm dan de moeite doen om een categorieenloader te maken?
+        return new CategorieenLoader(getActivity());
+        //return new CategorieenLoader(getActivity(), Contract.Categorieen.CONTENT_URI, new String[] {Contract.Categorieen._ID, Contract.Categorieen.Naam}, null, null, null);
+        //return new CursorLoader(getActivity(), Contract.Categorieen.CONTENT_URI, new String[] {Contract.Categorieen._ID, Contract.Categorieen.Naam}, null, null, null);
     }
 
     @Override

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_launcher"
+        android:id="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/lblCategorienaam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Categorienaam"
+        android:textSize="14sp"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="false"/>
+
+    <TextView
+        android:id="@+id/lblAantal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Aantal"
+        android:textSize="12sp"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_marginBottom="8dp"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
