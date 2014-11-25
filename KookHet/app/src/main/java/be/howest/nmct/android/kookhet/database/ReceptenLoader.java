@@ -29,13 +29,19 @@ public class ReceptenLoader extends AsyncTaskLoader<Cursor> {
                 " WHERE C.cNaam = ?", new String[] {"" + mCategorieNaam});
 
 //        mCursor = database.query(
-//                Contract.Recepten.CONTENT_DIRECTORY,
+//                Contract.Recepten.CONTENT_DIRECTORY + " R " +
+//                        "INNER JOIN " + Contract.ReceptCategorie.CONTENT_DIRECTORY + " RC ON (RC." + Contract.ReceptCategorie.ReceptId + " = R." + Contract.ReceptCategorie._ID + ") " +
+//                        "INNER JOIN " + Contract.Categorieen.CONTENT_DIRECTORY + " C ON (RC." + Contract.ReceptCategorie.ReceptId + " = C." + Contract.CategorieenColumns._ID + ")",
 //                new String[] {
-//                        Contract.ReceptenColumns._ID,
+//                        "R." + Contract.ReceptenColumns._ID,
 //                        /*"COUNT(*) AS " + Contract.ReceptenColumns._COUNT,*/
-//                        Contract.ReceptenColumns.Naam},
-//                null,
-//                null,
+//                        "R." + Contract.ReceptenColumns.Naam,
+//                        "R." + Contract.ReceptenColumns.Bereidingswijze,
+//                        "R." + Contract.ReceptenColumns.Bereidingstijd,
+//                        "R." + Contract.ReceptenColumns.IsVegetarisch,
+//                        "R." + Contract.ReceptenColumns.Image},
+//                "C." + Contract.CategorieenColumns.Naam + " = ?",
+//                new String[] { "" + mCategorieNaam },
 //                null,
 //                null,
 //                Contract.ReceptenColumns.Naam + " ASC"

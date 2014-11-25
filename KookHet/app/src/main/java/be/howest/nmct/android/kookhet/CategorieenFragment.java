@@ -72,8 +72,8 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
             }
         }
 
-        String[] columns = new String[] { Contract.CategorieenColumns.Naam };
-        int[] viewIds = new int[] { R.id.lblCategorienaam };
+        String[] columns = new String[] { Contract.CategorieenColumns.Naam/*, Contract.CategorieenColumns._COUNT*/ };
+        int[] viewIds = new int[] { R.id.lblCategorienaam/*, R.id.lblAantal*/ };
 
         //mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
         //mAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, columns, viewIds, 0);

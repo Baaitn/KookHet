@@ -79,8 +79,8 @@ public class ReceptenFragment extends Fragment implements AbsListView.OnItemClic
             }
         }
 
-        String[] columns = new String[] { Contract.ReceptenColumns.Naam };
-        int[] viewIds = new int[] { R.id.lblReceptnaam };
+        String[] columns = new String[] { Contract.ReceptenColumns.Naam, Contract.ReceptenColumns.Bereidingstijd };
+        int[] viewIds = new int[] { R.id.lblReceptnaam, R.id.lblBereidingstijd };
 
         //mAdapter = new ArrayAdapter<DummyContent.Recept>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.RECEPTEN);
         //mAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, columns, viewIds, 0);

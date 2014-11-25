@@ -144,15 +144,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Spaghetti Bolognese', 'Bereidingswijze', 'Bereidingstijd', 'False' )";
+                + " VALUES ('Spaghetti Bolognese', 'Bereidingswijze', '30 min', 'False' )";
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Kip met appelmoes en kroketjes', 'Bereidingswijze', 'Bereidingstijd', 'False' )";
+                + " VALUES ('Kip met appelmoes en kroketjes', 'Bereidingswijze', '20 min', 'False' )";
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Stoofvlees met frieten', 'Bereidingswijze', 'Bereidingstijd', 'False' )";
+                + " VALUES ('Stoofvlees met frieten', 'Bereidingswijze', '1 uur 40 min', 'False' )";
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
