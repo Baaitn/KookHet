@@ -34,7 +34,6 @@ public class ReceptenLoader extends AsyncTaskLoader<Cursor> {
 //                        "INNER JOIN " + Contract.Categorieen.CONTENT_DIRECTORY + " C ON (RC." + Contract.ReceptCategorie.ReceptId + " = C." + Contract.CategorieenColumns._ID + ")",
 //                new String[] {
 //                        "R." + Contract.ReceptenColumns._ID,
-//                        /*"COUNT(*) AS " + Contract.ReceptenColumns._COUNT,*/
 //                        "R." + Contract.ReceptenColumns.Naam,
 //                        "R." + Contract.ReceptenColumns.Bereidingswijze,
 //                        "R." + Contract.ReceptenColumns.Bereidingstijd,

@@ -22,16 +22,16 @@ public class CategorieenLoader extends AsyncTaskLoader<Cursor> {
         SQLiteDatabase database = helper.getWritableDatabase();
 
         mCursor = database.query(
-                Contract.Categorieen.CONTENT_DIRECTORY,
+                Contract.Categorieen.CONTENT_DIRECTORY + " C ",
                 new String[] {
-                        Contract.CategorieenColumns._ID,
-                        /*"COUNT(*) AS " + Contract.CategorieenColumns._COUNT,*/
-                        Contract.CategorieenColumns.Naam},
+                        "C." + Contract.Categorieen._ID,
+                        "( SELECT COUNT(*) FROM " + Contract.Recepten.CONTENT_DIRECTORY + " R, " + Contract.ReceptCategorie.CONTENT_DIRECTORY + " RC WHERE RC." + Contract.ReceptCategorie.ReceptId + " = R." + Contract.Recepten._ID + " AND RC." + Contract.ReceptCategorie.CategorieId + " = C." + Contract.Categorieen._ID + " ) AS " + Contract.Categorieen._COUNT,
+                        "C." + Contract.Categorieen.Naam},
                 null,
                 null,
                 null,
                 null,
-                Contract.CategorieenColumns.Naam + " ASC"
+                Contract.Categorieen.Naam + " ASC"
         );
 
         mCursor.getCount();

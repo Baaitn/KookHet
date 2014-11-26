@@ -33,8 +33,8 @@ public class Provider extends ContentProvider{
     static {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-        sUriMatcher.addURI(Contract.AUTHORITY, "categorie",CATEGORIE);
-        sUriMatcher.addURI(Contract.AUTHORITY, "categorie/#",CATEGORIE_ID);
+        sUriMatcher.addURI(Contract.AUTHORITY, "categorie", CATEGORIE);
+        sUriMatcher.addURI(Contract.AUTHORITY, "categorie/#", CATEGORIE_ID);
         sUriMatcher.addURI(Contract.AUTHORITY, "recepten", RECEPTEN);
         sUriMatcher.addURI(Contract.AUTHORITY, "recepten/#", RECEPT_ID);
 
@@ -65,14 +65,14 @@ public class Provider extends ContentProvider{
             case RECEPT_ID:
                 return Contract.Recepten.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException("Unknown URI: " + uri);
         }
     }
 
     @Override
     public boolean onCreate() {
         mOpenHelper = DatabaseHelper.getInstance(getContext());
-        return true ;
+        return true;
     }
 
     @Override
@@ -94,47 +94,47 @@ public class Provider extends ContentProvider{
             case CATEGORIE_ID:
                 qb.setTables(Contract.Categorieen.CONTENT_DIRECTORY);
                 qb.setProjectionMap(sCategorieProjectionMap);
-                qb.appendWhere("(" + Contract.Categorieen._ID + "=" + uri.getPathSegments().get(Contract.Categorieen.CATEGORIE_ID_PATH_POSITION)+")");
+                qb.appendWhere("(" + Contract.Categorieen._ID + " = " + uri.getPathSegments().get(Contract.Categorieen.CATEGORIE_ID_PATH_POSITION)+")");
 
                 if (TextUtils.isEmpty(sortOrder)){
                     orderBy = Contract.Categorieen.DEFAULT_SORT_ORDER;
                 }
                 break;
             default:
-                throw new IllegalArgumentException("Unknown URI" + uri);
+                throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
-        Cursor c = qb.query(db,projection,selection,selectionArgs,null,null,orderBy);
-        c.setNotificationUri(getContext().getContentResolver(),uri);
+        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, orderBy);
+        c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues contentValues) {
+    public Uri insert(Uri uri, ContentValues values) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
         long RowId;
 
         switch (sUriMatcher.match(uri)){
             case CATEGORIE:
-                if (!contentValues.containsKey(Contract.Categorieen.Naam)) {
+                if (!values.containsKey(Contract.Categorieen.Naam)) {
                     throw new IllegalArgumentException(Contract.Categorieen.Naam + " is required for " + Contract.Categorieen.CONTENT_DIRECTORY);
                 }
 
                 RowId = db.insert(
                         Contract.Categorieen.CONTENT_DIRECTORY,
                         Contract.Categorieen.Naam,
-                        contentValues
+                        values
                 );
 
                 if (RowId > 0 ) {
                     Uri categorieUri = ContentUris.withAppendedId(Contract.Categorieen.ITEM_CONTENT_URI, RowId);
-                    getContext().getContentResolver().notifyChange(categorieUri,null);
+                    getContext().getContentResolver().notifyChange(categorieUri, null);
                     return categorieUri;
                 }
                 break;
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
         throw new IllegalArgumentException();
@@ -157,8 +157,8 @@ public class Provider extends ContentProvider{
                 );
                 break;
             case CATEGORIE_ID:
-                String catId = uri.getPathSegments().get(Contract.Categorieen.CATEGORIE_ID_PATH_POSITION);
-                finalWhere = Contract.Categorieen._ID + "=" + catId;
+                String categorieId = uri.getPathSegments().get(Contract.Categorieen.CATEGORIE_ID_PATH_POSITION);
+                finalWhere = Contract.Categorieen._ID + " = " + categorieId;
 
                 if (where != null){
                     finalWhere = DatabaseUtils.concatenateWhere(finalWhere, where);
@@ -172,7 +172,7 @@ public class Provider extends ContentProvider{
                 );
                 break;
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
         getContext().getContentResolver().notifyChange(uri,null);
@@ -196,7 +196,7 @@ public class Provider extends ContentProvider{
                 break;
             case CATEGORIE_ID:
                 String categorieId = uri.getPathSegments().get(Contract.Categorieen.CATEGORIE_ID_PATH_POSITION);
-                finalWhere = Contract.Categorieen._ID + "=" + categorieId;
+                finalWhere = Contract.Categorieen._ID + " = " + categorieId;
 
                 if (where != null){
                     finalWhere = DatabaseUtils.concatenateWhere(finalWhere, where);
@@ -217,7 +217,7 @@ public class Provider extends ContentProvider{
                 break;
             case RECEPT_ID:
                 String receptenId = uri.getPathSegments().get(Contract.Recepten.RECEPT_ID_PATH_POSITION);
-                finalWhere = Contract.Recepten._ID + "=" + receptenId;
+                finalWhere = Contract.Recepten._ID + " = " + receptenId;
 
                 if (where != null){
                     finalWhere = DatabaseUtils.concatenateWhere(finalWhere, where);
@@ -230,7 +230,7 @@ public class Provider extends ContentProvider{
                 );
                 break;
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
         getContext().getContentResolver().notifyChange(uri, null);

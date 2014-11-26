@@ -140,7 +140,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Tomatensoep met balletjes', 'Bereidingswijze', 'Bereidingstijd', 'False' )";
+                + " VALUES ('Tomatensoep met balletjes', 'Bereidingswijze', '50 min', 'False' )";
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
@@ -148,15 +148,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Kip met appelmoes en kroketjes', 'Bereidingswijze', '20 min', 'False' )";
+                + " VALUES ('Kip met appelmoes en kroketjes', 'Bereidingswijze', '40 min', 'False' )";
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Stoofvlees met frieten', 'Bereidingswijze', '1 uur 40 min', 'False' )";
+                + " VALUES ('Stoofvlees met frieten', 'Bereidingswijze', '120 min', 'False' )";
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Chocolademousse', 'Bereidingswijze', 'Bereidingstijd', 'False' )";
+                + " VALUES ('Chocolademousse', 'Bereidingswijze', '30 min', 'False' )";
         database.execSQL(sql);
 
         //ReceptCategorie

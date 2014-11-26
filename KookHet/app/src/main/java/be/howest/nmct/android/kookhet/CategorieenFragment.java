@@ -72,8 +72,8 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
             }
         }
 
-        String[] columns = new String[] { Contract.CategorieenColumns.Naam/*, Contract.CategorieenColumns._COUNT*/ };
-        int[] viewIds = new int[] { R.id.lblCategorienaam/*, R.id.lblAantal*/ };
+        String[] columns = new String[] { Contract.CategorieenColumns.Naam, Contract.CategorieenColumns._COUNT };
+        int[] viewIds = new int[] { R.id.lblCategorienaam, R.id.lblAantal };
 
         //mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
         //mAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, columns, viewIds, 0);
@@ -141,7 +141,6 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
     }
 
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        //todo: Q: tom's code had curorloader, wrm dan de moeite doen om een categorieenloader te maken?
         return new CategorieenLoader(getActivity());
         //return new CategorieenLoader(getActivity(), Contract.Categorieen.CONTENT_URI, new String[] {Contract.Categorieen._ID, Contract.Categorieen.Naam}, null, null, null);
         //return new CursorLoader(getActivity(), Contract.Categorieen.CONTENT_URI, new String[] {Contract.Categorieen._ID, Contract.Categorieen.Naam}, null, null, null);
