@@ -2,16 +2,25 @@ package be.howest.nmct.android.kookhet;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.Context;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CursorAdapter;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+
+import be.howest.nmct.android.kookhet.database.ReceptLoader;
 
 // A simple {@link Fragment} subclass.
 // Activities that contain this fragment must implement the {@link ReceptFragment.OnFragmentInteractionListener} interface to handle interaction events.
 // Use the {@link ReceptFragment#newInstance} factory method to create an instance of this fragment.
-public class ReceptFragment extends Fragment {
+public class ReceptFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     // The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NavigatieId = "NavigatieId";
@@ -27,6 +36,8 @@ public class ReceptFragment extends Fragment {
     private String mReceptNaam;
 
     private OnFragmentInteractionListener mListener;
+
+    private CursorAdapter mAdapter;
 
     // Use this factory method to create a new instance of this fragment using the provided parameters.
     public static ReceptFragment newInstance(int NavigatieId, String CategorieNaam, String ReceptNaam) {
@@ -67,12 +78,33 @@ public class ReceptFragment extends Fragment {
                 mReceptNaam = getArguments().getString(ARG_ReceptNaam);
             }
         }
+
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recept, container, false);
+        View view = inflater.inflate(R.layout.fragment_recept, container, false);
+
+        //gepikt van hierboven
+        String[] columns = new String[] { Contract.ReceptenColumns.Naam };
+        int[] viewIds = new int[] { R.id.lblRecept };
+        mAdapter = new ReceptAdapter(getActivity(), R.layout.fragment_recept, null, columns, viewIds , 0);
+
+        //bind data uit cursor met controls in fragment
+        //TextView t = (TextView)view.findViewById(R.id.lblRecept);
+        //t.setText("test");
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -98,6 +130,21 @@ public class ReceptFragment extends Fragment {
         outState.putString(KEY_ReceptNaam, mReceptNaam);
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        return new ReceptLoader(getActivity(), mReceptNaam);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        mAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+        mAdapter.swapCursor(null);
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -110,5 +157,31 @@ public class ReceptFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    class ReceptAdapter extends SimpleCursorAdapter {
+
+        private Context context;
+        private int layout;
+
+        public ReceptAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+            super(context, layout, c, from, to, flags);
+            this.context = context;
+            this.layout = layout;
+        }
+
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            Cursor c = getCursor();
+
+            final LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(layout, parent, false);
+            TextView lblRecept = (TextView) view.findViewById(R.id.lblRecept);
+
+            String x = c.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Naam));
+            lblRecept.setText("tst");
+
+            return view;
+        }
     }
 }
