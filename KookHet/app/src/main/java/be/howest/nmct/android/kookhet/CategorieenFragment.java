@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -73,11 +75,12 @@ public class CategorieenFragment extends Fragment implements LoaderManager.Loade
         }
 
         String[] columns = new String[] { Contract.CategorieenColumns.Naam, Contract.CategorieenColumns._COUNT };
-        int[] viewIds = new int[] { R.id.lblCategorienaam, R.id.lblAantal };
+        int[] viewIds = new int[] { R.id.lblCategorienaam, R.id.lblAantalRecepten };
 
         //mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
         //mAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, columns, viewIds, 0);
-        mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.row_categorie, null, columns, viewIds , 0);
+        //mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.row_categorie, null, columns, viewIds , 0);
+        mAdapter = new CategorieenAdapter(getActivity(), R.layout.row_categorie, null, columns, viewIds , 0);
     }
 
     @Override
@@ -168,6 +171,45 @@ public class CategorieenFragment extends Fragment implements LoaderManager.Loade
         View emptyView = mListView.getEmptyView();
         if (emptyText instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
+        }
+    }
+
+    class CategorieenAdapter extends SimpleCursorAdapter {
+
+        class ViewHolder {
+
+            public ImageView image;
+            public TextView lblCategorienaam;
+            public TextView lblAantalRecepten;
+
+            public ViewHolder(View v) {
+                image = (ImageView) v.findViewById(R.id.imageView);
+                lblCategorienaam = (TextView) v.findViewById(R.id.lblCategorienaam);
+                lblAantalRecepten = (TextView) v.findViewById(R.id.lblAantalRecepten);
+            }
+        }
+
+        private Context context;
+        private int layout;
+
+        public CategorieenAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+            super(context, layout, c, from, to, flags);
+            this.context = context;
+            this.layout = layout;
+        }
+
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            View view = super.newView(context, cursor, parent);
+            view.setTag(new ViewHolder(view));
+            return view;
+        }
+
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            ViewHolder viewholder = (ViewHolder) view.getTag();
+            viewholder.lblCategorienaam.setText(cursor.getString(cursor.getColumnIndex(Contract.Categorieen.Naam)));
+            viewholder.lblAantalRecepten.setText("Aantal recepten: " + cursor.getString(cursor.getColumnIndex(Contract.Categorieen._COUNT)));
         }
     }
 }

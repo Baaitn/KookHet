@@ -11,7 +11,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -34,6 +37,8 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
     private static final String ARG_ReceptNaam = "ReceptNaam";
     private static final String KEY_ReceptNaam = "ReceptNaam";
     private String mReceptNaam;
+
+    private int mAantalPersonen = 1;
 
     private OnFragmentInteractionListener mListener;
 
@@ -79,9 +84,14 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
             }
         }
 
+        //String[] columns = new String[] { Contract.Recepten.Bereidingstijd };
+        //int[] viewIds = new int[] { R.id.lblBereidingstijd };
 
+        String[] columns = new String[] {  };
+        int[] viewIds = new int[] {  };
 
-
+        mAdapter = new ReceptAdapter(getActivity(), R.layout.recept, null, columns, viewIds, 0); //werkt
+        //mAdapter = new ReceptAdapter(getActivity(), R.layout.recept, null, null , null, 0); //crash
     }
 
     @Override
@@ -89,14 +99,18 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recept, container, false);
 
-        //gepikt van hierboven
-        String[] columns = new String[] { Contract.ReceptenColumns.Naam };
-        int[] viewIds = new int[] { R.id.lblRecept };
-        mAdapter = new ReceptAdapter(getActivity(), R.layout.fragment_recept, null, columns, viewIds , 0);
+        // Set the adapter
+        GridView grdRecept = (GridView)view.findViewById(R.id.grdRecept);
+        grdRecept.setAdapter(mAdapter);
 
-        //bind data uit cursor met controls in fragment
-        //TextView t = (TextView)view.findViewById(R.id.lblRecept);
-        //t.setText("test");
+        // Set OnItemClickListener so we can be notified on item clicks
+//        grdRecept.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                Cursor cursor = (Cursor)mAdapter.getItem(position);
+//                //...
+//            }
+//        });
 
         return view;
     }
@@ -114,6 +128,8 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
         // - Vanuit receptenfragment, met een receptnaam. De titel is een custom waarde, nl. de naam van een recept.
         ((MainActivity) getActivity()).onSectionAttached(getArguments().getInt(ARG_NavigatieId), getArguments().getString(ARG_ReceptNaam));
         ((MainActivity) getActivity()).restoreActionBar();
+
+        EnableDisableControls();
     }
 
     @Override
@@ -161,6 +177,23 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
 
     class ReceptAdapter extends SimpleCursorAdapter {
 
+        class ViewHolder {
+
+            public ImageView image;
+            public TextView lblBereidingstijd;
+            public TextView lblAantalPersonen;
+            public Button btnAdd;
+            public Button btnSub;
+
+            public ViewHolder(View v) {
+                image = (ImageView) v.findViewById(R.id.imageView);
+                lblBereidingstijd = (TextView) v.findViewById(R.id.lblBereidingstijd);
+                lblAantalPersonen = (TextView) v.findViewById(R.id.lblAantalPersonen);
+                btnAdd = (Button) v.findViewById(R.id.btnAdd);
+                btnSub = (Button) v.findViewById(R.id.btnSub);
+            }
+        }
+
         private Context context;
         private int layout;
 
@@ -172,16 +205,53 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
 
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            Cursor c = getCursor();
+            //final LayoutInflater inflater = LayoutInflater.from(context);
+            //View view = inflater.inflate(layout, parent, false);
 
-            final LayoutInflater inflater = LayoutInflater.from(context);
-            View view = inflater.inflate(layout, parent, false);
-            TextView lblRecept = (TextView) view.findViewById(R.id.lblRecept);
-
-            String x = c.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Naam));
-            lblRecept.setText("tst");
+            View view = super.newView(context, cursor, parent);
+            view.setTag(new ViewHolder(view));
 
             return view;
+        }
+
+        @Override
+        public void bindView(View view, final Context context, Cursor cursor) {
+            //String Bereidingstijd = cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Bereidingstijd));
+            //TextView lblBereidingstijd = (TextView) view.findViewById(R.id.lblBereidingstijd);
+            //if(Bereidingstijd != null) {lblBereidingstijd.setText("Bereidingstijd: " + Bereidingstijd);}
+
+            final ViewHolder viewholder = (ViewHolder) view.getTag();
+            viewholder.lblBereidingstijd.setText("Bereidingstijd: " + cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Bereidingstijd)));
+            viewholder.lblAantalPersonen.setText("Aantal personen: " + mAantalPersonen);
+
+            viewholder.btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Toast.makeText(getActivity(), "Add", Toast.LENGTH_LONG).show();
+                    mAantalPersonen = mAantalPersonen + 1;
+                    viewholder.lblAantalPersonen.setText("Aantal personen: " + mAantalPersonen);
+                    EnableDisableControls();
+                }
+            });
+
+            viewholder.btnSub.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Toast.makeText(getActivity(), "Sub", Toast.LENGTH_LONG).show();
+                    mAantalPersonen = mAantalPersonen - 1;
+                    viewholder.lblAantalPersonen.setText("Aantal personen: " + mAantalPersonen);
+                    EnableDisableControls();
+                }
+            });
+        }
+    }
+
+    private void EnableDisableControls() {
+        //Toast.makeText(getActivity(), "EDC", Toast.LENGTH_LONG).show();
+        if (mAantalPersonen <= 1) {
+            //getActivity().findViewById(R.id.btnSub).setEnabled(false);
+        } else {
+            //getActivity().findViewById(R.id.btnSub).setEnabled(true);
         }
     }
 }
