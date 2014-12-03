@@ -128,8 +128,6 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
         // - Vanuit receptenfragment, met een receptnaam. De titel is een custom waarde, nl. de naam van een recept.
         ((MainActivity) getActivity()).onSectionAttached(getArguments().getInt(ARG_NavigatieId), getArguments().getString(ARG_ReceptNaam));
         ((MainActivity) getActivity()).restoreActionBar();
-
-        EnableDisableControls();
     }
 
     @Override
@@ -238,20 +236,28 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
                 @Override
                 public void onClick(View view) {
                     //Toast.makeText(getActivity(), "Sub", Toast.LENGTH_LONG).show();
-                    mAantalPersonen = mAantalPersonen - 1;
-                    viewholder.lblAantalPersonen.setText("Aantal personen: " + mAantalPersonen);
-                    EnableDisableControls();
+                    if (mAantalPersonen >=2){
+                        mAantalPersonen = mAantalPersonen - 1;
+                        viewholder.lblAantalPersonen.setText("Aantal personen: " + mAantalPersonen);
+                        EnableDisableControls();
+                    }
+
                 }
             });
+            viewholder.btnSub.setEnabled(false);
+            EnableDisableControls();
+
         }
     }
 
     private void EnableDisableControls() {
         //Toast.makeText(getActivity(), "EDC", Toast.LENGTH_LONG).show();
         if (mAantalPersonen <= 1) {
-            //getActivity().findViewById(R.id.btnSub).setEnabled(false);
+            if (getActivity().findViewById(R.id.btnSub) != null)
+            getActivity().findViewById(R.id.btnSub).setEnabled(false);
         } else {
-            //getActivity().findViewById(R.id.btnSub).setEnabled(true);
+            if (getActivity().findViewById(R.id.btnSub) != null)
+            getActivity().findViewById(R.id.btnSub).setEnabled(true);
         }
     }
 }
