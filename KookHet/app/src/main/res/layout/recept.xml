@@ -1,0 +1,117 @@
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_margin="10dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:id="@+id/btnAdd"
+        android:layout_below="@+id/imageView"
+        android:layout_alignRight="@+id/imageView" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:id="@+id/btnSub"
+        android:layout_below="@+id/imageView"
+        android:layout_toLeftOf="@+id/btnAdd"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtAantalPersonen"
+        android:text="1"
+        android:layout_toStartOf="@+id/btnSub"
+        android:layout_alignBottom="@+id/btnSub"
+        android:layout_toLeftOf="@+id/btnSub"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bereidingstijd:"
+        android:id="@+id/lblBereidingstijd"
+        android:layout_below="@+id/imageView"
+        android:layout_alignLeft="@+id/imageView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aantal personen:"
+        android:id="@+id/lblAantalPersonen"
+        android:layout_alignBaseline="@+id/txtAantalPersonen"
+        android:layout_alignBottom="@+id/txtAantalPersonen"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignStart="@+id/lblBereidingstijd" />
+
+    <TabHost
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/tabHost"
+        android:layout_below="@+id/lblAantalPersonen"
+        android:layout_margin="10dp">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <LinearLayout
+                    android:id="@+id/Ingredienten"
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <!--<TextView-->
+                        <!--android:id="@android:id/empty"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="Ingredienten"/>-->
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Bereidingswijze"
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <!--<TextView-->
+                        <!--android:id="@android:id/empty"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="Bereidingswijze"/>-->
+
+                </LinearLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+</RelativeLayout>
