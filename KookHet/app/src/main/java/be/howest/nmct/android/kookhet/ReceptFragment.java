@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,8 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
     private OnFragmentInteractionListener mListener;
 
     private CursorAdapter mAdapter;
+
+    private FragmentTabHost mTabHost;
 
     // Use this factory method to create a new instance of this fragment using the provided parameters.
     public static ReceptFragment newInstance(int NavigatieId, String CategorieNaam, String ReceptNaam) {
@@ -111,6 +114,11 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
 //                //...
 //            }
 //        });
+
+        //tabpoging
+        //mTabHost = new FragmentTabHost(getActivity());
+        //mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.Ingredienten);
+        //mTabHost.addTab(mTabHost.newTabSpec("Ingredienten").setIndicator("Ingredienten"), FragmentStackSupport.CountingF);
 
         return view;
     }
