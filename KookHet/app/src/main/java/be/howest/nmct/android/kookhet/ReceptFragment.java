@@ -115,11 +115,6 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
 //            }
 //        });
 
-        //tabpoging
-        //mTabHost = new FragmentTabHost(getActivity());
-        //mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.Ingredienten);
-        //mTabHost.addTab(mTabHost.newTabSpec("Ingredienten").setIndicator("Ingredienten"), FragmentStackSupport.CountingF);
-
         return view;
     }
 
@@ -233,7 +228,6 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
             viewholder.btnAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(getActivity(), "Add", Toast.LENGTH_LONG).show();
                     mAantalPersonen = mAantalPersonen + 1;
                     viewholder.lblAantalPersonen.setText("Aantal personen: " + mAantalPersonen);
                     EnableDisableControls();
@@ -243,7 +237,6 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
             viewholder.btnSub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(getActivity(), "Sub", Toast.LENGTH_LONG).show();
                     if (mAantalPersonen >=2){
                         mAantalPersonen = mAantalPersonen - 1;
                         viewholder.lblAantalPersonen.setText("Aantal personen: " + mAantalPersonen);
@@ -252,9 +245,10 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
 
                 }
             });
-            viewholder.btnSub.setEnabled(false);
-            EnableDisableControls();
 
+            viewholder.btnSub.setEnabled(false);
+
+            EnableDisableControls();
         }
     }
 
