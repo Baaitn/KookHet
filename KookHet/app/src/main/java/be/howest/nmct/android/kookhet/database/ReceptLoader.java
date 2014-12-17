@@ -26,7 +26,7 @@ public class ReceptLoader extends AsyncTaskLoader<Cursor> {
                 " FROM Recepten R" +
                 " WHERE R.rNaam = ?", new String[] {"" + mReceptNaam});
 
-        mCursor.getCount();
+        int count = mCursor.getCount();
 
         return mCursor;
     }

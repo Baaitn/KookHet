@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import be.howest.nmct.android.kookhet.database.ReceptLoader;
@@ -74,6 +76,13 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        TabHost tabHost = (TabHost)getActivity().findViewById(android.R.id.tabhost);
+//
+//        TabHost.TabSpec tabIngrediënten = tabHost.newTabSpec("Ingrediënten");
+//        tabIngrediënten.setIndicator("Ingrediënten");
+//        tabIngrediënten.setContent(new Intent(this, TabIngrediëntenActivity));
+//        tabHost.addTab(tabIngrediënten);
+
         if (savedInstanceState != null) {
             mNavigatieId = savedInstanceState.getInt(KEY_NavigatieId);
             mCategorieNaam = savedInstanceState.getString(KEY_CategorieNaam);
@@ -87,6 +96,7 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
             }
         }
 
+
         //String[] columns = new String[] { Contract.Recepten.Bereidingstijd };
         //int[] viewIds = new int[] { R.id.lblBereidingstijd };
 
@@ -95,6 +105,7 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
 
         mAdapter = new ReceptAdapter(getActivity(), R.layout.recept, null, columns, viewIds, 0); //werkt
         //mAdapter = new ReceptAdapter(getActivity(), R.layout.recept, null, null , null, 0); //crash
+
     }
 
     @Override
