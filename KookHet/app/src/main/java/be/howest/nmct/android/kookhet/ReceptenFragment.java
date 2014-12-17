@@ -4,22 +4,40 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+import java.io.Console;
 
+import be.howest.nmct.android.kookhet.database.DatabaseHelper;
+import be.howest.nmct.android.kookhet.database.FavorietenLoader;
+import be.howest.nmct.android.kookhet.database.MenuLoader;
 import be.howest.nmct.android.kookhet.database.ReceptenLoader;
+import be.howest.nmct.android.kookhet.Provider;
 
 // A fragment representing a list of Items.
 // Large screen devices (such as tablets) are supported by replacing the ListView with a GridView.
@@ -102,6 +120,9 @@ public class ReceptenFragment extends Fragment implements LoaderManager.LoaderCa
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
+        //
+        mListView.setOnCreateContextMenuListener(this);
+
         return view;
     }
 
@@ -109,6 +130,111 @@ public class ReceptenFragment extends Fragment implements LoaderManager.LoaderCa
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(0, null, this);
+        //registerForContextMenu(mListView);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+
+        //Data voor contextmenu ophalen. Geen idee hoe hij weet op welk item je klikt, maar het werkt
+        Cursor cursor = mAdapter.getCursor();
+        String isf = cursor.getString(cursor.getColumnIndex(Contract.Recepten.IsFavoriet));
+        String ism = cursor.getString(cursor.getColumnIndex(Contract.Recepten.IsMenu));
+        if(isf == null || isf.isEmpty()) { isf = "false"; }
+        if(ism == null || ism.isEmpty()) { ism = "false"; }
+
+        //Maak contextmenu
+        menu.setHeaderTitle(cursor.getString(cursor.getColumnIndex(Contract.Recepten.Naam)));
+        if(isf.equals("false")){
+            menu.add(1, 1, Menu.NONE, "Toevoegen aan favorieten");
+        } else{
+            menu.add(1, 2, Menu.NONE, "Verwijder uit favorieten");
+        }
+        if(ism.equals("false")){
+            menu.add(2, 1, Menu.NONE, "Toevoegen aan menu");
+        } else{
+            menu.add(2, 2, Menu.NONE, "Verwijder uit menu");
+        }
+
+        //MenuInflater inflater = this.getActivity().getMenuInflater();
+        //inflater.inflate(R.menu.context, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        //selectedCategory = (BudgetCategory) mListView.getItemAtPosition(info.position);
+
+        Cursor cursor;
+        String id;
+        ContentValues values;
+        Uri uri;
+
+        // Set a different FRAGMENT_GROUPID on each fragment. A simple check, only continues on the correct fragment.
+        if(item.getGroupId() == 1)
+        {
+            switch (item.getItemId())
+            {
+                case 1:
+                    cursor = mAdapter.getCursor();
+                    id = cursor.getString(cursor.getColumnIndex(Contract.Recepten._ID));
+
+                    Toast.makeText(getActivity(), "addFavo: " + cursor.getString(cursor.getColumnIndex(Contract.Recepten.Naam)), Toast.LENGTH_SHORT).show();
+
+                    values = new ContentValues();
+                    values.put(Contract.Recepten.IsFavoriet, true);
+                    uri = Uri.parse(Contract.Recepten.CONTENT_URI + "/" + id);
+                    getActivity().getContentResolver().update(uri, values, null, null);
+
+                    return true;
+                case 2:
+                    cursor = mAdapter.getCursor();
+                    id = cursor.getString(cursor.getColumnIndex(Contract.Recepten._ID));
+
+                    Toast.makeText(getActivity(), "addFavo: " + cursor.getString(cursor.getColumnIndex(Contract.Recepten.Naam)), Toast.LENGTH_SHORT).show();
+
+                    values = new ContentValues();
+                    values.put(Contract.Recepten.IsFavoriet, false);
+                    uri = Uri.parse(Contract.Recepten.CONTENT_URI + "/" + id);
+                    getActivity().getContentResolver().update(uri, values, null, null);
+
+                    return true;
+            }
+        }
+        if(item.getGroupId() == 2)
+        {
+            switch (item.getItemId())
+            {
+                case 1:
+                    cursor = mAdapter.getCursor();
+                    id = cursor.getString(cursor.getColumnIndex(Contract.Recepten._ID));
+
+                    Toast.makeText(getActivity(), "addMenu: " + cursor.getString(cursor.getColumnIndex(Contract.Recepten.Naam)), Toast.LENGTH_SHORT).show();
+
+                    values = new ContentValues();
+                    values.put(Contract.Recepten.IsMenu, true);
+                    uri = Uri.parse(Contract.Recepten.CONTENT_URI + "/" + id);
+                    getActivity().getContentResolver().update(uri, values, null, null);
+
+                    return true;
+                case 2:
+                    cursor = mAdapter.getCursor();
+                    id = cursor.getString(cursor.getColumnIndex(Contract.Recepten._ID));
+
+                    Toast.makeText(getActivity(), "delMenu: " + cursor.getString(cursor.getColumnIndex(Contract.Recepten.Naam)), Toast.LENGTH_SHORT).show();
+
+                    values = new ContentValues();
+                    values.put(Contract.Recepten.IsMenu, false);
+                    uri = Uri.parse(Contract.Recepten.CONTENT_URI + "/" + id);
+                    getActivity().getContentResolver().update(uri, values, null, null);
+
+                    return true;
+            }
+        }
+        // Be sure to return false or super's so it will proceed to the next fragment!
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -140,7 +266,16 @@ public class ReceptenFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new ReceptenLoader(getActivity(), mCategorieNaam);
+        if(mNavigatieId == 1){
+            return new ReceptenLoader(getActivity(), mCategorieNaam);
+        }
+        else if (mNavigatieId == 2){
+            return new FavorietenLoader(getActivity());
+        }
+        else if (mNavigatieId == 3){
+            return new MenuLoader(getActivity());
+        }
+        return null;
     }
 
     @Override

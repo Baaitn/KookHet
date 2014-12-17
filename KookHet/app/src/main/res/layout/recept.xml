@@ -86,12 +86,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
-                    <TextView
-                        android:id="@android:id/empty"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="Ingredienten"/>
+                    <!--<TextView-->
+                        <!--android:id="@android:id/empty"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="Ingredienten"/>-->
 
                 </LinearLayout>
 
@@ -101,12 +101,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
-                    <TextView
-                        android:id="@android:id/empty"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="Bereidingswijze"/>
+                    <!--<TextView-->
+                        <!--android:id="@android:id/empty"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="Bereidingswijze"/>-->
 
                 </LinearLayout>
 

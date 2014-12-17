@@ -5,14 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class ReceptenLoader extends AsyncTaskLoader<Cursor> {
+public class FavorietenLoader extends AsyncTaskLoader<Cursor> {
 
     private Cursor mCursor;
-    private final String mCategorieNaam;
 
-    public ReceptenLoader(Context context, String CategorieNaam) {
+    public FavorietenLoader(Context context) {
         super(context);
-        this.mCategorieNaam = CategorieNaam;
     }
 
     @Override
@@ -26,7 +24,7 @@ public class ReceptenLoader extends AsyncTaskLoader<Cursor> {
                 " FROM Recepten R" +
                 " INNER JOIN ReceptCategorie RC ON (RC.rcReceptId = R._ID)" +
                 " INNER JOIN Categorieen C ON (RC.rcCategorieId = C._ID)" +
-                " WHERE C.cNaam = ?", new String[] {"" + mCategorieNaam});
+                " WHERE R.rIsFavoriet = ?", new String[] {"" + String.valueOf(true)});
 
 //        mCursor = database.query(
 //                Contract.Recepten.TABLE_NAME + " R " +
