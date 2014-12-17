@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import be.howest.nmct.android.kookhet.database.ReceptenLoader;
+
+import static android.database.DatabaseUtils.dumpCursorToString;
 
 // A fragment representing a list of Items.
 // Large screen devices (such as tablets) are supported by replacing the ListView with a GridView.
@@ -146,6 +149,7 @@ public class ReceptenFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        Log.d("cursorinhoud ReceptenFragment: ", dumpCursorToString(cursor));
         mAdapter.swapCursor(cursor);
     }
 

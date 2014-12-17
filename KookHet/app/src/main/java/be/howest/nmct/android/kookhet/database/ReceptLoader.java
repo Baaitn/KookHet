@@ -4,6 +4,9 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import static android.database.DatabaseUtils.dumpCursorToString;
 
 public class ReceptLoader extends AsyncTaskLoader<Cursor> {
 
@@ -25,9 +28,7 @@ public class ReceptLoader extends AsyncTaskLoader<Cursor> {
                 " SELECT *" +
                 " FROM Recepten R" +
                 " WHERE R.rNaam = ?", new String[] {"" + mReceptNaam});
-
-        int count = mCursor.getCount();
-
+        Log.d("mCursor inhoud: ",dumpCursorToString(mCursor));
         return mCursor;
     }
 

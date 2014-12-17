@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +28,8 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import be.howest.nmct.android.kookhet.database.ReceptLoader;
+
+import static android.database.DatabaseUtils.dumpCursorToString;
 
 
 public class ReceptActivity extends TabActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, LoaderManager.LoaderCallbacks<Cursor>{
@@ -82,7 +85,10 @@ public class ReceptActivity extends TabActivity implements NavigationDrawerFragm
         Button btnSub = (Button) findViewById(R.id.btnSub);
 
         //Cursor cursor = mAdapter.getCursor();
-
+        Log.d("cursorinhoud: ", dumpCursorToString(cursor));
+        Log.d("opgevraagde index: ", "" + cursor.getColumnIndex(Contract.ReceptenColumns.Bereidingstijd));
+        cursor.moveToFirst();
+        Log.d("resultaat uit cursor",cursor.getString(3));
         lblBereidingstijd.setText("Bereidingstijd: " + cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Bereidingstijd)));
         lblAantalPersonen.setText("Aantal personen: " + mAantalPersonen);
 
@@ -168,6 +174,7 @@ public class ReceptActivity extends TabActivity implements NavigationDrawerFragm
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         //mAdapter.swapCursor(cursor);
+        Log.d("cursor inhoud onLoadFinished: ", dumpCursorToString(cursor));
         this.cursor = cursor;
         createMAdapter();
     }
