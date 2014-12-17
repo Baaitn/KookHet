@@ -2,42 +2,32 @@ package be.howest.nmct.android.kookhet;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.LoaderManager;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.io.Console;
 
-import be.howest.nmct.android.kookhet.database.DatabaseHelper;
 import be.howest.nmct.android.kookhet.database.FavorietenLoader;
 import be.howest.nmct.android.kookhet.database.MenuLoader;
 import be.howest.nmct.android.kookhet.database.ReceptenLoader;
-import be.howest.nmct.android.kookhet.Provider;
 
 // A fragment representing a list of Items.
 // Large screen devices (such as tablets) are supported by replacing the ListView with a GridView.
@@ -296,14 +286,21 @@ public class ReceptenFragment extends Fragment implements LoaderManager.LoaderCa
 
             Cursor cursor = (Cursor)mAdapter.getItem(position);
 
+            Intent intent = new Intent(this.getActivity(), ReceptActivity.class);
+            intent.putExtra(ReceptActivity.ARG_CategorieNaam, mCategorieNaam);
+            intent.putExtra(ReceptActivity.ARG_NavigatieId, mNavigatieId);
+            intent.putExtra(ReceptActivity.ARG_ReceptBereiding, cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Bereidingswijze)));
+            intent.putExtra(ReceptActivity.ARG_ReceptNaam, cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Naam)));
+            startActivity(intent);
+
             // Bij klikken op recept, details van het recept ophalen
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, ReceptFragment.newInstance(
-                    getArguments().getInt(ARG_NavigatieId),
-                    getArguments().getString(ARG_CategorieNaam),
-                    /*parent.getItemAtPosition(position).toString()*/
-                    cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Naam))
-            )).addToBackStack(null).commit();
+//            FragmentManager fragmentManager = getFragmentManager();
+//            fragmentManager.beginTransaction().replace(R.id.container, ReceptFragment.newInstance(
+//                    getArguments().getInt(ARG_NavigatieId),
+//                    getArguments().getString(ARG_CategorieNaam),
+//                    /*parent.getItemAtPosition(position).toString()*/
+//                    cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Naam))
+//            )).addToBackStack(null).commit();
         }
     }
 

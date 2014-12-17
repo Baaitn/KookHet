@@ -129,8 +129,8 @@ public class ReceptFragment extends Fragment implements LoaderManager.LoaderCall
         super.onResume();
         // Receptfragment kan maar op 1 manier gestart worden:
         // - Vanuit receptenfragment, met een receptnaam. De titel is een custom waarde, nl. de naam van een recept.
-        ((MainActivity) getActivity()).onSectionAttached(getArguments().getInt(ARG_NavigatieId), getArguments().getString(ARG_ReceptNaam));
-        ((MainActivity) getActivity()).restoreActionBar();
+        ((ReceptActivity) getActivity()).onSectionAttached(getArguments().getInt(ARG_NavigatieId), getArguments().getString(ARG_ReceptNaam));
+        ((ReceptActivity) getActivity()).restoreActionBar();
     }
 
     @Override
