@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -161,14 +162,20 @@ public class ReceptenFragment extends Fragment implements LoaderManager.LoaderCa
 
             Cursor cursor = (Cursor)mAdapter.getItem(position);
 
+            Intent intent = new Intent(this.getActivity(), ReceptActivity.class);
+            intent.putExtra(ReceptActivity.ARG_CategorieNaam, mCategorieNaam);
+            intent.putExtra(ReceptActivity.ARG_NavigatieId, mNavigatieId);
+            intent.putExtra(ReceptActivity.ARG_ReceptNaam, cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Naam)));
+            startActivity(intent);
+
             // Bij klikken op recept, details van het recept ophalen
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, ReceptFragment.newInstance(
-                    getArguments().getInt(ARG_NavigatieId),
-                    getArguments().getString(ARG_CategorieNaam),
-                    /*parent.getItemAtPosition(position).toString()*/
-                    cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Naam))
-            )).addToBackStack(null).commit();
+//            FragmentManager fragmentManager = getFragmentManager();
+//            fragmentManager.beginTransaction().replace(R.id.container, ReceptFragment.newInstance(
+//                    getArguments().getInt(ARG_NavigatieId),
+//                    getArguments().getString(ARG_CategorieNaam),
+//                    /*parent.getItemAtPosition(position).toString()*/
+//                    cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Naam))
+//            )).addToBackStack(null).commit();
         }
     }
 
