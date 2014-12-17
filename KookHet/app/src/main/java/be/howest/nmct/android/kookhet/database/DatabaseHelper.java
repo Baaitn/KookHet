@@ -3,9 +3,14 @@ package be.howest.nmct.android.kookhet.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import be.howest.nmct.android.kookhet.Contract;
+import be.howest.nmct.android.kookhet.RestAPI;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -114,9 +119,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void fill(SQLiteDatabase database) {
         //TODO: echte data inladen
-        loadDummyData(database);
+        //loadDummyData(database);
         //loadDataBaseData(database);
+        new LoadJson().execute();
     }
+        private void insertCategorie(SQLiteDatabase database,Integer Id,String naam,String omschrijving) {
+            String sql;
+    sql = "INSERT INTO " + Contract.Categorieen.CONTENT_DIRECTORY
+            + " ( " + Contract.CategorieenColumns._ID + "," + Contract.CategorieenColumns.Naam + ", " + Contract.CategorieenColumns.Omschrijving + " ) "
+            + " VALUES ( '"+Id+"','"+naam+"','"+omschrijving+"' )";
+    database.execSQL(sql);
+
+    }
+    private void insertCategorieRecept(SQLiteDatabase database,Integer receptId, Integer catId) {
+        String sql;
+        sql = "INSERT INTO " + Contract.ReceptCategorie.CONTENT_DIRECTORY
+                + " ( " + Contract.ReceptCategorie.CategorieId + ", " + Contract.ReceptCategorie.ReceptId + " ) "
+                + " VALUES ('"+catId+"', '"+receptId+"' )";
+        database.execSQL(sql);
+
+    }
+    private void insertReceptIngredient(SQLiteDatabase database,Integer receptID,Integer ingredientId, String hoeveelheid) {
+        String sql;
+        sql = "INSERT INTO " + Contract.ReceptIngredient.CONTENT_DIRECTORY
+                + " ( " + Contract.ReceptIngredient.ReceptId + ", " + Contract.ReceptIngredient.IngredientId  + ", " + Contract.ReceptIngredient.Hoeveelheid + ") "
+                + " VALUES ('"+receptID+"', '"+ingredientId+"', '"+hoeveelheid+"')";
+
+    }
+
+    private void insertRecept(SQLiteDatabase database,Integer Id, String naam, String bereidingswijze, Integer bereidingstijd, Boolean isvegitarisch) {
+        String sql;
+        sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
+                + " (" + Contract.ReceptenColumns._ID + ", " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
+                + " VALUES ('"+Id+"', '"+naam+"', '"+bereidingswijze+"', '"+bereidingstijd+"', '"+isvegitarisch+"' )";
+        database.execSQL(sql);
+
+    }
+
+    private void insertIngredient(SQLiteDatabase database,Integer id,String naam) {
+        String sql;
+        sql = "INSERT INTO " + Contract.Ingredienten.CONTENT_DIRECTORY
+                + "(" + Contract.ReceptenColumns._ID + "," + Contract.IngredientenColumns.Naam + " ) "
+                + " VALUES ('"+id+"', '"+naam+"');";
+        database.execSQL(sql);
+
+    }
+
+
 
     private void loadDummyData(SQLiteDatabase database) {
         String sql;
@@ -271,5 +320,132 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void loadDataBaseData(SQLiteDatabase database) {
 
+    }
+
+    private class LoadJson extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            RestAPI api;
+            JSONArray arr;
+            JSONObject jsonobj;
+            try {
+
+
+                api = new RestAPI();
+
+                jsonobj =  api.GetCategorieen();
+      arr =  jsonobj.getJSONArray("Value");
+
+                    for(int i = 0 ; i < arr.length()-1 ; i++) {
+                        String naam,omschrijving;
+                        Integer id;
+                JSONObject o = arr.getJSONObject(i);
+                        id = o.getInt("ID");
+                        omschrijving = o.getString("omschrijving");
+                        naam = o.getString("naam");
+                        insertCategorie(getWritableDatabase(),id,naam,omschrijving);
+                    }
+
+
+
+                api = new RestAPI();
+
+
+                jsonobj=  api.GetReceptCategorie();
+                arr  =  jsonobj.getJSONArray("Value");
+
+                for(int i = 0 ; i < arr.length()-1 ; i++) {
+
+                    Integer receptId,catId;
+                    JSONObject o = arr.getJSONObject(i);
+                    receptId = o.getInt("receptID");
+                    catId = o.getInt("CategorieID");
+
+                    insertCategorieRecept(getWritableDatabase(),receptId,catId);
+                }
+
+
+
+
+                api = new RestAPI();
+
+
+                jsonobj=  api.GetRecepten();
+                arr  =  jsonobj.getJSONArray("Value");
+
+                for(int i = 0 ; i < arr.length()-1 ; i++) {
+
+                    Integer Id,bereidingstijd;
+                    String naam,bereidingswijze;
+                    boolean isveg;
+
+                    JSONObject o = arr.getJSONObject(i);
+                    naam = o.getString("naam");
+                    bereidingswijze = o.getString("bereidingsWijze");
+                    Id=o.getInt("ID");
+                    bereidingstijd=o.getInt("bereidingsTijd");
+                    isveg = o.getBoolean("isVegitarisch");
+
+
+
+                    insertRecept(getWritableDatabase(),Id,naam,bereidingswijze,bereidingstijd,isveg);
+                }
+
+
+
+                api = new RestAPI();
+
+
+                jsonobj=  api.GetIngredienten();
+                arr  =  jsonobj.getJSONArray("Value");
+
+                for(int i = 0 ; i < arr.length()-1 ; i++) {
+
+                    Integer Id;
+                    String naam;
+                               JSONObject o = arr.getJSONObject(i);
+                    naam = o.getString("naam");
+
+                    Id=o.getInt("ID");
+
+
+
+
+                    insertIngredient(getWritableDatabase(),Id,naam);
+                }
+
+
+
+                api = new RestAPI();
+
+
+                jsonobj=  api.GetReceptIngredient();
+                arr  =  jsonobj.getJSONArray("Value");
+
+                for(int i = 0 ; i < arr.length()-1 ; i++) {
+
+                    Integer ingredientID,receptID;
+                    String hoeveelheid;
+                    JSONObject o = arr.getJSONObject(i);
+                    hoeveelheid = o.getString("hoeveelheid");
+
+                    receptID=o.getInt("receptID");
+                    ingredientID=o.getInt("ingredientID");
+
+
+
+                   insertReceptIngredient(getWritableDatabase(),receptID,ingredientID,hoeveelheid);
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            return "test";
+
+        }
     }
 }
