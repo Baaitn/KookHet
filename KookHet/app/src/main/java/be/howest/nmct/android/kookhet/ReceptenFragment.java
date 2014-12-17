@@ -165,6 +165,7 @@ public class ReceptenFragment extends Fragment implements LoaderManager.LoaderCa
             Intent intent = new Intent(this.getActivity(), ReceptActivity.class);
             intent.putExtra(ReceptActivity.ARG_CategorieNaam, mCategorieNaam);
             intent.putExtra(ReceptActivity.ARG_NavigatieId, mNavigatieId);
+            intent.putExtra(ReceptActivity.ARG_ReceptBereiding, cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Bereidingswijze)));
             intent.putExtra(ReceptActivity.ARG_ReceptNaam, cursor.getString(cursor.getColumnIndex(Contract.ReceptenColumns.Naam)));
             startActivity(intent);
 

@@ -16,6 +16,10 @@ public class ReceptActivity extends TabActivity implements NavigationDrawerFragm
 
     private CharSequence mTitle;
 
+    public static final String ARG_ReceptBereiding = "ReceptBereiding";
+    private static final String KEY_ReceptBereiding = "ReceptBereiding";
+    private String mReceptBereiding;
+
     public static final String ARG_NavigatieId = "NavigatieId";
     private static final String KEY_NavigatieId = "NavigatieId";
     private int mNavigatieId;
@@ -43,12 +47,13 @@ public class ReceptActivity extends TabActivity implements NavigationDrawerFragm
             mNavigatieId = savedInstanceState.getInt(KEY_NavigatieId);
             mCategorieNaam = savedInstanceState.getString(KEY_CategorieNaam);
             mReceptNaam = savedInstanceState.getString(KEY_ReceptNaam);
+            mReceptBereiding = savedInstanceState.getString(KEY_ReceptBereiding);
         }
         else {
             mNavigatieId = getIntent().getIntExtra(ARG_NavigatieId, 0);
             mCategorieNaam = getIntent().getStringExtra(ARG_CategorieNaam);
             mReceptNaam = getIntent().getStringExtra(ARG_ReceptNaam);
-
+            mReceptBereiding = getIntent().getStringExtra(ARG_ReceptBereiding);
         }
     }
 
@@ -61,8 +66,12 @@ public class ReceptActivity extends TabActivity implements NavigationDrawerFragm
         tabIngrediënten.setIndicator("Ingrediënten");
         tabBereiding.setIndicator("Bereiding");
 
-        tabIngrediënten.setContent(new Intent(this, IngredientActivity.class));
-        tabBereiding.setContent(new Intent(this, BereidingsActivity.class));
+        Intent IngredientIntent = new Intent(this, IngredientActivity.class);
+        tabIngrediënten.setContent(IngredientIntent);
+
+        Intent BereidingsIntent = new Intent(this, BereidingsActivity.class);
+        BereidingsIntent.putExtra("BereidingsWijze","test");
+        tabBereiding.setContent(BereidingsIntent);
 
         tabHost.addTab(tabIngrediënten);
         tabHost.addTab(tabBereiding);

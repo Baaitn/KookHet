@@ -140,23 +140,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Tomatensoep met balletjes', 'Bereidingswijze', '50 min', 'False' )";
+                + " VALUES ('Tomatensoep met balletjes', 'Dummy hoe maak ik tomatensoep', '50 min', 'False' )";
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Spaghetti Bolognese', 'Bereidingswijze', '30 min', 'False' )";
+                + " VALUES ('Spaghetti Bolognese', 'Dummy hoe maak ik Spaghetti', '30 min', 'False' )";
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Kip met appelmoes en kroketjes', 'Bereidingswijze', '40 min', 'False' )";
+                + " VALUES ('Kip met appelmoes en kroketjes', 'Dummy hoe maak ik kip', '40 min', 'False' )";
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Stoofvlees met frieten', 'Bereidingswijze', '120 min', 'False' )";
+                + " VALUES ('Stoofvlees met frieten', 'Dummy hoe maak ik stoofvlees', '120 min', 'False' )";
         database.execSQL(sql);
         sql = "INSERT INTO " + Contract.Recepten.CONTENT_DIRECTORY
                 + " ( " + Contract.ReceptenColumns.Naam + ", " + Contract.ReceptenColumns.Bereidingswijze + ", " + Contract.ReceptenColumns.Bereidingstijd + ", " + Contract.ReceptenColumns.IsVegetarisch + " ) "
-                + " VALUES ('Chocolademousse', 'Bereidingswijze', '30 min', 'False' )";
+                + " VALUES ('Chocolademousse', 'Dummy hoe maak ik chocomousse?', '30 min', 'False' )";
         database.execSQL(sql);
 
         //ReceptCategorie
