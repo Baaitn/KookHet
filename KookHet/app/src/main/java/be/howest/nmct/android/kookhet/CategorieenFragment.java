@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -22,7 +24,7 @@ import be.howest.nmct.android.kookhet.database.CategorieenLoader;
 // A fragment representing a list of Items.
 // Large screen devices (such as tablets) are supported by replacing the ListView with a GridView.
 // Activities containing this fragment MUST implement the {@link Callbacks} interface.
-public class CategorieenFragment extends Fragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class CategorieenFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AbsListView.OnItemClickListener {
 
     // The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NavigatieId = "NavigatieId";
@@ -73,11 +75,12 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
         }
 
         String[] columns = new String[] { Contract.CategorieenColumns.Naam, Contract.CategorieenColumns._COUNT };
-        int[] viewIds = new int[] { R.id.lblCategorienaam, R.id.lblAantal };
+        int[] viewIds = new int[] { R.id.lblCategorienaam, R.id.lblAantalRecepten };
 
         //mAdapter = new ArrayAdapter<DummyContent.Categorie>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.CATEGORIEEN);
         //mAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, columns, viewIds, 0);
-        mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.row_categorie, null, columns, viewIds , 0);
+        //mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.row_categorie, null, columns, viewIds , 0);
+        mAdapter = new CategorieenAdapter(getActivity(), R.layout.row_categorie, null, columns, viewIds , 0);
     }
 
     @Override
@@ -122,6 +125,22 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
         outState.putInt(KEY_NavigatieId, mNavigatieId);
     }
 
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        return new CategorieenLoader(getActivity());
+        //return new CategorieenLoader(getActivity(), Contract.Categorieen.CONTENT_URI, new String[] {Contract.Categorieen._ID, Contract.Categorieen.Naam}, null, null, null);
+        //return new CursorLoader(getActivity(), Contract.Categorieen.CONTENT_URI, new String[] {Contract.Categorieen._ID, Contract.Categorieen.Naam}, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        mAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+        mAdapter.swapCursor(null);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
@@ -140,20 +159,11 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
         }
     }
 
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CategorieenLoader(getActivity());
-        //return new CategorieenLoader(getActivity(), Contract.Categorieen.CONTENT_URI, new String[] {Contract.Categorieen._ID, Contract.Categorieen.Naam}, null, null, null);
-        //return new CursorLoader(getActivity(), Contract.Categorieen.CONTENT_URI, new String[] {Contract.Categorieen._ID, Contract.Categorieen.Naam}, null, null, null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        mAdapter.swapCursor(cursor);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-        mAdapter.swapCursor(null);
+    // This interface must be implemented by activities that contain this fragment to allow an interaction in this fragment to be communicated to the activity and potentially other fragments contained in that activity.
+    // See the Android Training lesson <a href="http://developer.android.com/training/basics/fragments/communicating.html">Communicating with Other Fragments</a> for more information.
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        public void onFragmentInteraction(String id);
     }
 
     // The default content for this Fragment has a TextView that is shown when the list is empty. If you would like to change the text, call this method to supply the text it should use.
@@ -164,10 +174,42 @@ public class CategorieenFragment extends Fragment implements AbsListView.OnItemC
         }
     }
 
-    // This interface must be implemented by activities that contain this fragment to allow an interaction in this fragment to be communicated to the activity and potentially other fragments contained in that activity.
-    // See the Android Training lesson <a href="http://developer.android.com/training/basics/fragments/communicating.html">Communicating with Other Fragments</a> for more information.
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+    class CategorieenAdapter extends SimpleCursorAdapter {
+
+        class ViewHolder {
+
+            public ImageView image;
+            public TextView lblCategorienaam;
+            public TextView lblAantalRecepten;
+
+            public ViewHolder(View v) {
+                image = (ImageView) v.findViewById(R.id.imageView);
+                lblCategorienaam = (TextView) v.findViewById(R.id.lblCategorienaam);
+                lblAantalRecepten = (TextView) v.findViewById(R.id.lblAantalRecepten);
+            }
+        }
+
+        private Context context;
+        private int layout;
+
+        public CategorieenAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+            super(context, layout, c, from, to, flags);
+            this.context = context;
+            this.layout = layout;
+        }
+
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            View view = super.newView(context, cursor, parent);
+            view.setTag(new ViewHolder(view));
+            return view;
+        }
+
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            ViewHolder viewholder = (ViewHolder) view.getTag();
+            viewholder.lblCategorienaam.setText(cursor.getString(cursor.getColumnIndex(Contract.Categorieen.Naam)));
+            viewholder.lblAantalRecepten.setText("Aantal recepten: " + cursor.getString(cursor.getColumnIndex(Contract.Categorieen._COUNT)));
+        }
     }
 }

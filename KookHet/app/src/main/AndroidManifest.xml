@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="be.howest.nmct.android.kookhet" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +19,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".Provider"
+            android:authorities="be.howest.nmct.android.kookhet"
+            android:readPermission="true"
+            android:writePermission="true"
+            android:enabled="true"
+            android:exported="false" >
+        </provider>
+
+        <activity
+            android:name=".ReceptActivity"
+            android:label="@string/title_activity_recept" >
+        </activity>
+
+        <activity
+            android:name=".IngredientActivity"
+            android:label="@string/title_activity_ingredient" >
+        </activity>
+
+        <activity
+            android:name=".BereidingsActivity"
+            android:label="@string/title_activity_bereidings" >
+        </activity>
+
     </application>
 
 </manifest>
