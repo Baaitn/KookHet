@@ -120,9 +120,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void fill(SQLiteDatabase database) {
-        //loadDummyData(database);
+        loadDummyData(database);
         //loadDataBaseData(database);
-        new LoadJson().execute();
+        //new LoadJson().execute(); //Vanuit de RESTAPI: private final String urlString = "http://192.168.56.1/Kookhetwebserver/kookhandler.ashx
+
     }
 
     private void insertCategorie(SQLiteDatabase database,Integer Id,String naam,String omschrijving) {
